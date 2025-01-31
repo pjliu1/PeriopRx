@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Insulin Before Procedure Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 80px auto 30px auto; 
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            display: none; /* Hides sections until selected */
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .option {
+            background-color: #e2f0ff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+        .option.selected {
+            background-color: #4CAF50;
+        }
+        .option:hover {
+            background-color: #cce5ff;
+        }
+        .button {
+            position: relative;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #injectables, #insulin-calculator, #ssi-prevention, #medication-management, #guidelines,#anticoagulation {
+            display: block; /* Ensure sections are hidden by default */
+        }
+
+
+        #header {
+            position: fixed; /* Keep header at top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+            z-index: 1000;
+            top: 0;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .dose-output {
+            margin-top: 5px;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 40px;
+        }
+       
+    
+        .citation{
+            margin-top: 20px;
+            color: lightgray;
+            font-size: 8px;
+            margin bottom: 7px;
+        }
+           
+        #reset-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #reset-button:hover {
+            background-color: #ff4c39;
+        }
+        .info-text {
+            margin-top: 15px;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 40px;
+        }
+        #selection-box {
+            text-align: left;
+        }
+        #next-button {
+            margin-left: auto;
+            display: block;
+        }
+       
+    </style>
+   
+</head>
+<body>
+
+<!-- Sticky Header -->
+    <div id="header" style="position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; border-bottom: 2px solid #ddd; z-index: 1000;">
+        Perioperative Pharmacy Resources
+        <div style="margin-top: 10px;">
+            <button onclick="showSection('anticoagulation')" class="button">Anticoagulation</button>
+            <button onclick="showSection('medication-management')" class="button">Medication Management</button>
+            <button onclick="showSection('rheumatic')" class="button">Rheumatic Diseases</button>
+            <button onclick="showSection('injectables')" class="button">Diabetic Injectable Info</button>
+            <button onclick="showSection('insulin-calculator')" class="button">Insulin Calculator</button>
+            <button onclick="showSection('ssi-prevention')" class="button">SSI Prevention</button>
+        </div>
+    </div>
+    
+
+<!-- Diabetic Injectable Info Section -->
+    <div id="injectables" class="container">
+          <h2 style="color: #007bff; text-align: center;">Diabetic Injectable Information</h2>
+    <div class="section-box">
+        <h3>Pre-Operative Guidance on Diabetic Injectable Medications</h3>
+        <h4>Insulins</h4>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Type of Insulin</th>
+                    <th>Day Before AM</th>
+                    <th>Day Before PM</th>
+                    <th>Day of</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Long Acting (Glargine or Detemir)</td>
+                    <td>Usual</td>
+                    <td style="background-color: #e2f0ff; font-weight: bold;">80%</td>
+                    <td style="background-color: #e2f0ff; font-weight: bold;">80% (if BID basal)</td>
+                </tr>
+                <tr>
+                    <td>NPH or 70/30</td>
+                    <td style="background-color: #e2f0ff; font-weight: bold;">80%</td>
+                    <td style="background-color: #e2f0ff; font-weight: bold;">80%</td>
+                    <td style="background-color: #e2f0ff; font-weight: bold;">50% (if bg <120 mg/dL, hold)</td>
+                </tr>
+                <tr>
+                    <td>Rapid Acting and Regular (Lispro, Aspart, Glulisine, Regular)</td>
+                    <td>Usual</td>
+                    <td>Usual</td>
+                    <td style="background-color: #f9f9f9; font-weight: bold; color: #e74c3c;">Hold</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 20px; font-size: 14px; color: gray; text-align: center;">Note: Adjustments may vary depending on individual patient conditions. Always consult your healthcare provider for personalized dosing instructions.</p>
+
+    <div class="section-box">
+        <h4>GLP-1 (Glucagon-Like Peptide-1) Receptor Agonists</h4>
+        <p>GLP-1 receptor agonists, including both subcutaneous and oral formulations, have different recommendations for procedure preparation:</p>
+
+        <h5>Subcutaneous GLP-1s (Weekly Dosed)</h5>
+        <p>For subcutaneous GLP-1 receptor agonists that are dosed weekly (e.g., semaglutide, dulaglutide), it is essential to hold the medication at least 7 days prior to the procedure. This is because these medications can influence gastrointestinal motility, potentially affecting anesthesia or the procedure itself. Stopping the medication a week before ensures that the drug's effects are minimized during the procedure.</p>
+
+        <h5>Date Calculator for Subcutaneous GLP-1s</h5>
+        <p>Use the date calculator below to find the last possible date you can take your subcutaneous GLP-1 injection (weekly dosed) before your procedure. This date should be at least 7 days before the procedure.</p>
+
+        <div style="margin-top: 20px;">
+            <label for="procedureDate">Procedure Date (MM/DD/YYYY):</label>
+            <input type="date" id="procedureDate" required>
+
+            <label for="doseDay">Day of Week for Dose:</label>
+            <select id="doseDay">
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+            </select>
+
+            <button onclick="calculateLastDoseDate()">Calculate Last Dose Date</button>
+
+            <p id="lastDoseDate" style="margin-top: 15px; font-weight: bold;"></p>
+        </div>
+
+        <script>
+            function calculateLastDoseDate() {
+                const procedureDate = document.getElementById('procedureDate').value;
+                const doseDay = document.getElementById('doseDay').value;
+
+                if (!procedureDate || !doseDay) {
+                    alert("Please enter both the procedure date and the day of the dose.");
+                    return;
+                }
+
+                // Convert procedure date to a Date object
+                const procedure = new Date(procedureDate);
+
+                // Create an object for the days of the week
+                const daysOfWeek = {
+                    Sunday: 0,
+                    Monday: 1,
+                    Tuesday: 2,
+                    Wednesday: 3,
+                    Thursday: 4,
+                    Friday: 5,
+                    Saturday: 6
+                };
+
+                // Calculate how many days to subtract to get the last dose day
+                const lastDoseDayOffset = procedure.getDay() - daysOfWeek[doseDay];
+                const lastDoseDate = new Date(procedure);
+                lastDoseDate.setDate(lastDoseDate.getDate() - 7 - lastDoseDayOffset);
+
+                // Format the date to be like "Thursday, November 17"
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedLastDoseDate = lastDoseDate.toLocaleDateString('en-US', options);
+
+                // Display the result
+                document.getElementById('lastDoseDate').innerText = `Last dose date: ${formattedLastDoseDate}`;
+            }
+        </script>
+    </div>
+
+    <p style="margin-top: 20px; font-size: 14px; color: gray; text-align: center;">Note: Adjustments may vary depending on individual patient conditions. Always consult your healthcare provider for personalized dosing instructions.</p>
+
+    <p class="citation" style="font-size: 10px; color: gray; text-align: center; margin-top: 30px;">
+        Gariani K, Putzu A. Glucagon-like peptide-1 receptor agonists in the perioperative period: Implications for the anaesthesiologist. Eur J Anaesthesiol. 2024 Mar 1;41(3):245-246. doi: 10.1097/EJA.0000000000001914. Epub 2024 Feb 2. PMID: 38298102; PMCID: PMC10842663.
+    </p>
+    </div>
+
+    <style>
+    .section-box {
+        background-color: #ffffff;
+        border: 1px solid #e1e1e1;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .section-box h3, .section-box h4, .section-box h5 {
+        color: #007bff;
+        font-size: 20px;
+    }
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    .styled-table th, .styled-table td {
+        padding: 12px;
+        text-align: left;
+    }
+    .styled-table th {
+        background-color: #007bff;
+        color: white;
+    }
+    .styled-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .styled-table tr:hover {
+        background-color: #d1e7ff;
+    }
+    .citation {
+        font-size: 10px;
+        color: gray;
+        text-align: center;
+    }
+    .citation a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    .citation a:hover {
+        text-decoration: underline;
+    }
+    </style>
+    <!-- SSI Prevention Section -->
+    <div id="ssi-prevention" class="container">
+        <h2 style="color: #007bff; text-align: center;">Surgical Site Infection Prevention</h2>
+        <p>Preventing surgical site infections (SSIs) is a critical aspect of surgical care. The use of prophylactic antibiotics is an essential strategy to reduce the risk of SSIs. The following guidelines from the 2016 American College of Surgeons and Surgical Infection Society should be followed to optimize antibiotic prophylaxis:</p>
+
+        <div class="section-box">
+            <h3>General Guidelines</h3>
+            <ul>
+                <li>Administer prophylactic antibiotics only when indicated.</li>
+                <li>Choose prophylactic antibiotics based on the procedure and the pathogens most likely to cause SSI.</li>
+            </ul>
+        </div>
+
+        
+        <div class="section-box">
+            <h3>Selection and Timing of Antibiotics</h3>
+             <p>The antibiotic selected should be dictated by the surgical procedure and the pathogens most likely to cause infection. Common pathogens include <strong>Staphylococcus aureus, coagulase negative staphylococci, Enterococcus species, and Escherichia coli</strong>, among others.</p>
+            <p>Administer the prophylactic antibiotic <strong>within 1 hour before incision</strong>, except for vancomycin or fluoroquinolones, which should be administered <strong>within 2 hours before incision</strong>.</p>
+        </div>
+
+    <div class ="section-box">
+        <h3> Patient Hypersensitivities</h3>
+        <p>Be sure to consider patient hypersensitivites to antibiotics. Patients with a documented penicillin allergy may have cross-reactivity with cephalosporins, particularly first-generation cephalosporins such as cefazolin. While the overall risk of cross-reactivity is low (estimated at less than 10%), it is higher in those with a history of anaphylaxis to penicillin. Alternative antibiotic choices, such as clindamycin or vancomycin, may be appropriate for these patients, depending on surgical site infection risk and institutional protocols.</p>
+        <img src="B lactam abx.png" alt="b lactam cross reactivity" width="770"> 
+    </div>
+        <div class="section-box">
+            <h3>MRSA Screening and Decolonization</h3>
+             <p>Methicillin-resistant Staphylococcus aureus (MRSA) screening is performed to determine if a patient is colonized with MRSA. Colonization increases the risk of surgical site infections (SSIs), particularly in high-risk procedures.Screening is typically done using a nasal swab. Patients testing positive may undergo decolonization to reduce the bacterial burden before surgery.
+</p>
+            <p>Recommended for:</p>
+        <ul>
+            <li><strong>Total Joint Arthroplasty (TJA)</strong> -Hip, knee, and shoulder replacements</li>
+            <li><strong>Cardiac Procedures</strong>-Open-heart surgery, valve replacements</li>
+        </ul>
+<p>There is no universally accepted decolonization protocol supported by clinical literature. However, options include:</p>
+            <ul>
+                <li>Nasal Mupirocin Alone – Applied intranasally for a specified duration preoperatively</li>
+                <li>Nasal Mupirocin + Chlorhexidine Gluconate (CHG) Bathing – A combination approach involving intranasal mupirocin and daily CHG body washes for 5 days before surgery</li>
+            </ul>
+        </div>
+
+        <div class="section-box">
+            <h3>Bowel Preparation</h3>
+            <p>Proper bowel preparation is essential for colorectal surgeries to minimize the risk of SSIs. The following measures should be followed:</p>
+            <ul>
+                <li><strong>Mechanical Cleansing:</strong> Use enemas or other methods to clear the bowel of fecal material before surgery.</li>
+                <li><strong>Oral Antibiotic Prophylaxis:</strong> The use of oral antibiotics helps reduce the risk of bacterial contamination during the procedure, particularly in colorectal surgeries.</li>
+            </ul>
+        </div>
+
+        <div class="section-box">
+            <h3>Antibiotic Dosing </h3>
+            <p>Ensure the dosage of prophylactic antibiotics is dosed based on <strong>actual body weight</strong> to maintain sufficient tissue concentrations for infection prevention.</p>
+            <p>Re-dosing is necessary to maintain adequate tissue levels, particularly for long surgeries or significant blood loss. Re-dose antibiotics based on the agent’s <strong>half-life</strong> or after every <strong>1,500 mL of blood loss</strong>.</p> 
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Antibiotic</th>
+                        <th>Half-life (t½)</th>
+                        <th>Re-dose Timing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cefazolin</td>
+                        <td>2 hours</td>
+                        <td>Re-dose every 4-6 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Vancomycin</td>
+                        <td>4-6 hours</td>
+                        <td>Re-dose every 8-12 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Metronidazole</td>
+                        <td>6-8 hours</td>
+                        <td>Re-dose every 8 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Ampicillin/Sulbactam</td>
+                        <td>1 hour</td>
+                        <td>Re-dose every 2 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Clindamycin</td>
+                        <td>3 hours</td>
+                        <td>Re-dose every 6 hours</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+       
+
+        <p class="citation" style="font-size: 10px; color: gray; text-align: center; margin-top: 30px;">
+            Ban KA, Minei JP, Laronga C, Harbrecht BG, Jensen EH, Fry DE, Itani KM, Dellinger EP, Ko CY, Duane TM. American College of Surgeons and Surgical Infection Society: Surgical Site Infection Guidelines, 2016 Update. J Am Coll Surg. 2017 Jan;224(1):59-74. doi: 10.1016/j.jamcollsurg.2016.10.029. Epub 2016 Nov 30. PMID: 27915053.
+            <br>For further reading: 
+            <a href="https://labeling.pfizer.com/ShowLabeling.aspx?id=7006" target="_blank">Pfizer Labeling</a>,
+            <a href="https://www.pfizermedicalinformation.com/vancomycin-inj-0/clinical-pharmacology" target="_blank">Clinical Pharmacology</a>,
+            <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/018353s026lbl.pdf" target="_blank">FDA Label</a>
+        </p>
+    </div>
+
+    <style>
+        .section-box {
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section-box h3 {
+            color: #007bff;
+            font-size: 20px;
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .styled-table th, .styled-table td {
+            padding: 12px;
+            text-align: left;
+        }
+        .styled-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .styled-table tr:hover {
+            background-color: #d1e7ff;
+        }
+        .citation {
+            font-size: 10px;
+            color: gray;
+            text-align: center;
+        }
+        .citation a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .citation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+ <!--anticoagulation section -->   
+    <div id="anticoagulation" class="container">
+        <h2 style="color: #007bff; text-align: center;">Anticoagulation Considerations</h2>
+
+        <div class="section-box">
+            <h3>Antiplatelet Management</h3>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Hold Before</th>
+                        <th>Restart After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Aspirin</td><td>7 days</td><td>24–48 hrs</td></tr>
+                    <tr><td>Clopidogrel</td><td>5–7 days</td><td>24 hrs</td></tr>
+                    <tr><td>Prasugrel</td><td>7 days</td><td>24 hrs</td></tr>
+                    <tr><td>Ticagrelor</td><td>5 days</td><td>24 hrs</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <h3>GP IIb/IIIa Inhibitors & Fibrinolytics</h3>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Hold Before</th>
+                        <th>Restart After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Abciximab</td><td>2–5 days</td><td>8–12 hrs</td></tr>
+                    <tr><td>Eptifibatide, Tirofiban</td><td>8–24 hrs</td><td>8–12 hrs</td></tr>
+                    <tr><td>Fondaparinux</td><td>4 days</td><td>6–24 hrs</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <h3>Anticoagulant Management</h3>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Hold Before</th>
+                        <th>Restart After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Warfarin</td><td>5 days</td><td>24 hrs</td></tr>
+                    <tr><td>Rivaroxaban, Apixaban, Edoxaban</td><td>3 days</td><td>24 hrs</td></tr>
+                    <tr><td>Dabigatran (CrCl ≥50)</td><td>4 days</td><td>24 hrs</td></tr>
+                    <tr><td>Dabigatran (CrCl <50)</td><td>5–6 days</td><td>24 hrs</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <h3>Heparins</h3>
+            <p><strong>Procedure risk affects holding times:</strong></p>
+            <ul>
+                <li><strong>Low-risk:</strong> TPIs, nerve blocks, joint injections</li>
+                <li><strong>Moderate-high risk:</strong> Deep blocks, epidurals, kyphoplasty</li>
+            </ul>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Hold (Low)</th>
+                        <th>Hold (Int.)</th>
+                        <th>Hold (High)</th>
+                        <th>Restart (Low)</th>
+                        <th>Restart (Int./High)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>IV Heparin</td><td>6 hrs</td><td>6 hrs</td><td>6 hrs</td><td>2 hrs</td><td>2 hrs</td></tr>
+                    <tr><td>SC Heparin</td><td>24 hrs</td><td>6 hrs</td><td>6 hrs</td><td>2 hrs</td><td>6–8 hrs</td></tr>
+                    <tr><td>Enoxaparin (Proph.)</td><td>12 hrs</td><td>12 hrs</td><td>12 hrs</td><td>4 hrs</td><td>12–24 hrs</td></tr>
+                    <tr><td>Enoxaparin (Thera.)</td><td>24 hrs</td><td>24 hrs</td><td>24 hrs</td><td>4 hrs</td><td>12–24 hrs</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <h3>Epidural & Spinal Anesthesia</h3>
+            <p>Proper anticoagulation timing prevents <strong>spinal hematoma</strong>.</p>
+            <ul>
+                <li><strong>Enoxaparin:</strong> Prophylactic: 12 hrs; Therapeutic: 24 hrs.</li>
+                <li><strong>Warfarin:</strong> INR &lt;1.4 before, restart post-catheter.</li>
+                <li><strong>DOACs:</strong> Hold 48 hrs before, restart 6+ hrs after.</li>
+            </ul>
+        </div>
+
+        <p class="citation">
+            Narouze S, et al. <em>Interventional Spine and Pain Procedures...</em> Reg Anesth Pain Med. 2018; 43(3):225-62. DOI: 10.1097/AAP.0000000000000700.<br>
+            Douketis JD, et al. <em>Perioperative Management of Antithrombotic Therapy</em>. CHEST, 2018; 162(5): e207–e243.
+        </p>
+    </div>
+
+    <style>
+        .section-box {
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section-box h3 {
+            color: #007bff;
+            font-size: 20px;
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .styled-table th, .styled-table td {
+            padding: 12px;
+            text-align: center;
+        }
+        .styled-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .styled-table tr:hover {
+            background-color: #d1e7ff;
+        }
+        .citation {
+            font-size: 10px;
+            color: gray;
+            text-align: center;
+        }
+    </style>
+
+<!--rheum-->
+    <div id="rheumatic" class="container">
+        <h2 style="color: #007bff; text-align: center;">Rheumatic Diseases</h2>
+        <p>The following are summaries of recommendations from various perioperative guidelines.</p>
+        <h3>Rheumatic Disease and Orthopedic Surgery</h3>
+        <p>When patients with rheumatic diseases undergo total hip or knee surgery, proper medication management is essential to optimize surgical outcomes and minimize complications. The following guidelines outline when to hold or restart medications commonly used for managing rheumatic conditions. These are a summary of recommendations from the Rheumatic Disease Medications in Orthopedic Surgery ACR/AAOS 2022 Guidelines.</p>
+
+        <div class="section-box">
+            <h3>1. Nonsteroidal Anti-Inflammatory Drugs (NSAIDs)</h3>
+            <ul>
+                <li><strong>Hold</strong>: 7–10 days before elective orthopedic surgeries to reduce bleeding risks and improve healing.</li>
+                <li><strong>Restart</strong>: As soon as possible after surgery, once the patient is healing well.</li>
+            </ul>
+        </div>
+
+        <div class="section-box">
+            <h3>2. Disease-Modifying Anti-Rheumatic Drugs (DMARDs)</h3>
+            <ul>
+                <li><strong>Methotrexate</strong>: 
+                    <ul>
+                        <li><strong>Hold</strong>: 1–2 weeks before surgery to decrease the risk of wound healing issues.</li>
+                        <li><strong>Restart</strong>: 1–2 weeks after surgery, depending on recovery progress.</li>
+                    </ul>
+                </li>
+                <li><strong>Biologic Agents (e.g., TNF inhibitors)</strong>: 
+                    <ul>
+                        <li><strong>Etanercept, Infliximab</strong>: 
+                            <ul>
+                                <li><strong>Hold</strong>: 1–2 weeks before surgery.</li>
+                                <li><strong>Restart</strong>: 1–2 weeks after surgery, based on surgical recovery.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Other Biologics</strong>: 
+                            <ul>
+                                <li><strong>Hold</strong>: 4–6 weeks before surgery to allow the immune system to recover and reduce the risk of infection.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-box">
+            <h3>3. Corticosteroids</h3>
+            <ul>
+                <li><strong>Systemic Corticosteroids</strong>: 
+                    <ul>
+                        <li><strong>Continue</strong>: Until surgery. For major surgeries, consider administering a perioperative steroid boost to prevent adrenal insufficiency.</li>
+                    </ul>
+                </li>
+                <li><strong>Intraarticular Steroids</strong>: 
+                    <ul>
+                        <li><strong>Hold</strong>: 2–4 weeks before surgery to minimize the risk of infections due to suppressed immune response.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <p class="citation" style="font-size: 10px; color: gray; text-align: center; margin-top: 30px;">
+            2022 American College of Rheumatology/American Association of Hip and Knee Surgeons Guideline for the Perioperative Management of Antirheumatic Medication in Patients With Rheumatic Diseases Undergoing Elective Total Hip or Total Knee Arthroplasty. Arthritis Care & Research, Vol. 74, No. 9, September 2022, pp 1399–1408. DOI: <a href="https://doi.org/10.1002/acr.24893" target="_blank">10.1002/acr.24893</a>. © 2022 American College of Rheumatology.
+        </p>
+    </div>
+
+    <style>
+        .section-box {
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section-box h3 {
+            color: #007bff;
+            font-size: 20px;
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .styled-table th, .styled-table td {
+            padding: 12px;
+            text-align: left;
+        }
+        .styled-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .styled-table tr:hover {
+            background-color: #d1e7ff;
+        }
+    </style>
+
+    
+    
+    <!-- Medication Management -->
+    <div id="medication-management" class="container">    
+        <h2 style="color: #007bff; text-align: center;">Pre-Operative Medication Management</h2>
+
+        <div class="section-box">
+            <h3>When to Hold Supplements and Vitamins</h3>
+            <p>It is recommended to stop supplements and vitamins at least two weeks before medical procedures to reduce risks like excessive bleeding, medication interactions, or delayed healing. Certain supplements, such as fish oil, vitamin E, and herbal products like ginkgo biloba, can thin the blood or affect anesthesia. Pausing them allows the body time to clear potential risks.</p>
+            <ul>
+                <li>Herbal supplements, combination vitamins, Vascepa, Lovaza, and natural products should be held <strong>14 days prior to a procedure.</strong></li>
+                <li>Exceptions to this rule include: Vitamin D, Vitamin B (individual agents only), Calcium, Folic acid, Iron, Magnesium, Potassium, probiotics, or vitamins prescribed for specific patient populations (Cystic Fibrosis, pregnancy, ALS, renal/dialysis patients, etc.) and may be continued.</li>
+            </ul>
+        </div>
+
+        <div class="section-box">
+            <h3>Medication Holds Before a Procedure</h3>
+            <p>Below is general guidance on Pre-Operative Medication management:</p>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Medication Category</th>
+                        <th>Specific Medication(s)</th>
+                        <th>Time to Hold Before Surgery</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="3">Selective Estrogen Receptor Modulators</td>
+                        <td>Tamoxifen (breast cancer prevention)</td>
+                        <td>3 days</td>
+                    </tr>
+                    <tr>
+                        <td>Tamoxifen (breast cancer treatment)</td>
+                        <td>consult oncologist</td>
+                    </tr>
+                    <tr>
+                        <td>Raloxifene</td>
+                        <td>3 days</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Antiplatelets</td>
+                        <td>Aspirin and Prasurgel</td>
+                        <td>7 days</td>
+                    </tr>
+                    <tr>
+                        <td>Clopidogrel</td>
+                        <td>5–7 days</td>
+                    </tr>
+                    <tr>
+                        <td>Antiplatelets</td>
+                        <td>Ticagrelor</td>
+                        <td>5 days</td>
+                    </tr>
+                    <tr>
+                        <td>GLP-1 medications (weekly)</td>
+                        <td>Dulaglutide (Trulicity), Exenatide (Bydureon), Tirzepatide (Mounjaro, Zepbound), Semaglutide injectable (Wegovy, Ozempic)</td>
+                        <td>7 Days</td>
+                    </tr>
+                    <tr>
+                        <td>Weight loss medications</td>
+                        <td>Phentermine, Diethylpropion</td>
+                        <td>4 Days</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">SGLT2 medications</td>
+                        <td>Ertugliflozin (Steglatro), Ertugliflozin & Metformin (Segluromet), Ertugliflozin & Sitagliptin (Steglujan)</td>
+                        <td>4 Days</td>
+                    </tr>
+                    <tr>
+                        <td>Canagliflozin (Invokana), Dapagliflozin (Farxiga), Empagliflozin (Jardiance), etc.</td>
+                        <td>3 Days</td>
+                    </tr>
+                    <tr>
+                        <td>Medications containing Naltrexone</td>
+                        <td>Naltrexone or medications containing Naltrexone</td>
+                        <td>3 Days</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Raloxifene</td>
+                        <td>3 Days</td>
+                    </tr>
+                    <tr>
+                        <td>Marijuana</td>
+                        <td>Medical Marijuana</td>
+                        <td>3 Days</td>
+                    </tr>
+                    <tr>
+                        <td>GLP-1 medications (daily)</td>
+                        <td>Liraglutide (Victoza, Saxenda), Semaglutide oral (Rybelsus), Lixisenatide (Adlyxine)</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Erectile dysfunction medications</td>
+                        <td>Avanafil (Stendra), Sildenafil (Viagra), Tadalafil (Cialis), Vardenafil (Levitra, Staxyn)</td>
+                        <td>2 days (Continue for Pulmonary Hypertension Indication)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Theophylline</td>
+                        <td>Evening before surgery</td>
+                    </tr>
+                    <tr>
+                        <td>Antifungals</td>
+                        <td>Clotrimazole, Fluconazole (Diflucan), Griseofulvin, etc.</td>
+                        <td>Day of surgery</td>
+                    </tr>
+                    <tr>
+                        <td>Antivirals</td>
+                        <td>Acyclovir, Famciclovir, Ganciclovir, etc.</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Antibiotics</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Alzheimer’s Medications</td>
+                        <td>Donepezil, Galantamine, Memantine, Rasagiline, Rivastigmine, Selegiline, Safinamide</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Antianxiety, Antidepressants, and Antipsychotics</td>
+                        <td>Benzodiazepines, TCA, SSRI, SNRI, Atypical Antipsychotics, Haloperidol, Loxapine, Chlorpromazine, Lithium, Bupropion, Mirtazapine, Trazodone, Vortioxetine, Buspirone, Pimavanserin</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Antiretrovirals (HIV Medications)</td>
+                        <td>Abacavir/lamivudine/dolutegravir, Atazanavir, Cabotegravir, Cobicistat, Darunavir, Maraviroc, Nelfinavir, Nevirapine, Raltegravir, Rilpivirine, Ritonavir, Saquinavir, Stavudine, Tenofovir, Tipranavir, Zidovudine, etc.</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Antiretrovirals (Hepatitis B & C Medications)</td>
+                        <td>Simeprevir, Daclatasvir, Sofosbuvir, Elbasvir/grazoprevir, Entecavir, Glecaprevir/pibrentasvir, Ledipasvir-sofosbuvir, Ombitasvir/paritaprevir/ritonavir/dasabuvir, Ombitasvir/paritaprevir/ritonavir, Sofosbuvir-velpatasvir, Sofosbuvir-velpatasvir-voxilaprevir</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Anti-Seizure Medications</td>
+                        <td>Carbamazepine, Brivaracetam, Cenobamate, Eslicarbazepine, Ethosuximide, Felbamate, Gabapentin, Lacosamide, Lamotrigine, Levetiracetam, Oxcarbazepine, Phenobarbital, Phenytoin, Primidone, Tiagabine, Topiramate, Valproic Acid, Vigabatrin, Zonisamide</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>GI Medications</td>
+                        <td>Dicyclomine, Lactulose, Laxatives, Linaclotide, Mesalamine, Methylnaltrexone, Miralax, Naloxegol, Plecanatide, Prucalopride, Rifaximin, Stool Softeners, Sulcrafate, Sulfasalzine, Pancreatic enzymes, Metoclopramide, Ursodiol</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Osteoporosis Medications</td>
+                        <td>Alendronate, Alendronate/cholecalciferol, Ibandronate, Risedronate, Zoledronic Acid</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Select Cardiac Medications</td>
+                        <td>ACEi, ARB, Aliskiren, Sacubitril/Valsartan</td>
+                        <td>Day of</td>
+                    </tr>
+                    <tr>
+                        <td>Blood Thinners</td>
+                        <td>Warfarin</td>
+                        <td>3 Days</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section-box">
+            <h3>Buprenorphine Considerations</h3>
+            <p>Buprenorphine is a partial opioid agonist, and its long half-life can affect anesthesia and pain management during a procedure. It may also precipitate withdrawal symptoms if discontinued abruptly or interfere with the efficacy of opioid analgesics, requiring careful consideration and coordination with healthcare providers. Below is a decision tree for determining usage during the perioperative period.</p>
+             
+            <img src="buprenorphine before surgery.png">
+            <p style="font-size: 8px; color: gray; text-align: center;">Selvamani BJ, Kral L, Swaran Singh T. Perioperative management of patients on buprenorphine for opioid use disorder. ASRA Pain Medicine News 2022;47. https://doi.org/10.52211/asra020123.010.</p>
+        </div>
+          <p style="margin-top: 30px; font-size: 8px; color: gray; text-align: center;">Cummings, Kenneth C., III, et al. "Preoperative Management of Surgical Patients Using Dietary Supplements: Society for Perioperative Assessment and Quality Improvement (SPAQI) Consensus Statement."Mayo Clin Proc. 2021;96(5):1342-1355. doi: 10.1056/NEJMc2021.0204. Epub 2021 Feb 9. PMID</p>
+        </div>
+
+    </div>
+
+<!-- Insulin Calculator Section -->
+<div id="insulin-calculator" class="container">
+    <p>
+    <div id="selection-box" class="section">
+       <h2 style="color: #007bff; text-align: center;">Pre-Operative Insulin Calculator</h2>
+        <p style= "text-align: center;">To accurately calculate the appropriate insulin dose for your patient, please select the type(s) of insulin they will be using during the pre-operative period.</p>
+        <h4>Select the Insulin(s) you are using:</h4>
+        <div id="insulin-options"></div>
+        <button id="next-button" class="button" onclick="nextStep()" disabled>Next</button>
+    </div>
+
+    <div id="dose-inputs" class="hidden section">
+        <h3>Dose adjustments before procedure:</h3>
+        <div id="dose-details"></div>
+        <button onclick="resetForm()" class="button" id="reset-button">Reset</button>
+    </div>
+    </p>
+    <p style="margin-top: 30px; font-size: 8px; color: gray; text-align: center;">
+        Duggan, Elizabeth W. M.D.; Carlson, Karen M.D., M.B.A.; Umpierrez, Guillermo E. M.D., C.D.E.. Perioperative Hyperglycemia Management: An Update. Anesthesiology 126(3):p 547-560, March 2017. | DOI: 10.1097/ALN.0000000000001515 
+    </p>
+</div>
+
+<script>
+    const insulinCategories = {
+        shortActing: [
+            "Admelog (lispro)", "Afrezza (inhaled regular)", "Apidra (glulisine)",
+            "Fiasp (aspart)", "Humalog (lispro)", "Lyumjev (lispro-aabc)", "Novolog (aspart)", 
+            "Humulin R (regular)", "Novolin R (regular)"
+        ],
+        longActing: [
+            "Basaglar (glargine)", "Lantus (glargine)", "Rezvoglar (glargine-aglr)", 
+            "Semglee (glargine-yfgn)", "Toujeo (glargine)", "Tresiba (degludec)"
+        ],
+        intermediateActing: [
+            "Humalog Mix (lispro protamine/lispro)", "Humulin N (NPH)", 
+            "Humulin 70/30 (NPH/Regular)", "Novolin N (NPH)", "Novolog Mix (aspart protamine/aspart)"
+        ],
+        glp1Insulins: [
+            "Soilqua (glargine/lixisenatide)", "Xultophy (degludec/liraglutide)"
+        ]
+    };
+
+function showSection(sectionId) {
+console.log(`Showing section: ${sectionId}`);
+// Hide all sections
+document.querySelectorAll('.container').forEach(function(container) {
+    container.style.display = 'none';
+});
+
+// Show the selected section
+const selectedSection = document.getElementById(sectionId);
+if (selectedSection) {
+    selectedSection.style.display = 'block';
+}
+    }
+
+    function displayInsulinOptions() {
+        const container = document.getElementById("insulin-options");
+        container.innerHTML = "";
+
+        let allInsulins = [
+            ...insulinCategories.shortActing,
+            ...insulinCategories.longActing,
+            ...insulinCategories.intermediateActing,
+            ...insulinCategories.glp1Insulins
+        ];
+
+        allInsulins.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+        allInsulins.forEach(type => {
+            const div = document.createElement("div");
+            div.textContent = type;
+            div.classList.add("option");
+            div.onclick = () => {
+                div.classList.toggle("selected");
+                enableNextButton();  // Check if we should enable "Next" button
+            };
+            container.appendChild(div);
+        });
+    }
+
+    function enableNextButton() {
+        const nextButton = document.getElementById("next-button");
+        const selectedOptions = document.querySelectorAll(".selected");
+        nextButton.disabled = selectedOptions.length === 0;  // Enable "Next" only if at least one insulin is selected
+    }
+
+    function nextStep() {
+        const selectedOptions = Array.from(document.getElementsByClassName("selected")).map(el => el.textContent);
+
+        // Hide the selection box and show the dose inputs form
+        document.getElementById("selection-box").classList.add("hidden");
+        document.getElementById("dose-inputs").classList.remove("hidden");
+        updateForm();
+    }
+
+    
+
+    function calculate() {
+        let selectedOptions = Array.from(document.getElementsByClassName("selected")).map(el => el.textContent);
+
+        selectedOptions.forEach(type => {
+            let outputElement = document.getElementById(`output-${type}`);
+
+            // Clear any previous output for that insulin type
+            if (outputElement) {
+                outputElement.innerHTML = "";
+            }
+
+            // Handle long-acting insulins (calculating 80% of dose)
+            if (insulinCategories.longActing.includes(type)) {
+                let doseInput = document.querySelector(`input[data-type='${type}']`);
+                let timing = document.querySelector(`select[data-type='${type}']`).value;
+                let dose = parseFloat(doseInput.value);
+
+                if (!isNaN(dose) && outputElement) {
+                    let calculatedDose = Math.round(dose * 0.8);
+                    let timingText = timing.toLowerCase() === 'evening' ? 'the evening before procedure' : 'the morning of procedure';
+                    outputElement.innerHTML = `Patients will take 80% of their normal dose prior to their procedure.<br>
+                                               Dose Recommendation: <strong>${calculatedDose} units</strong> ${timingText}<br>`;
+                }
+            }
+            // Handle intermediate-acting insulins (calculating 80% for AM/PM doses)
+            else if (insulinCategories.intermediateActing.includes(type)) {
+                let amDose = parseFloat(document.querySelector(`input.morning-dose[data-type='${type}']`)?.value);
+                let pmDose = parseFloat(document.querySelector(`input.evening-dose[data-type='${type}']`)?.value);
+
+                if (!isNaN(amDose) && !isNaN(pmDose) && outputElement) {
+                    let amBefore = Math.round(amDose * 0.8);
+                    let pmBefore = Math.round(pmDose * 0.8);
+                    let amDayOf = Math.round(amDose * 0.5);
+                    outputElement.innerHTML = `Patients will take 80% of doses the day before and 50% the morning of the procedure. Dosing recommendations: <br>
+                                               Morning before procedure: ${amBefore} units<br>
+                                               Evening before procedure: ${pmBefore} units<br>
+                                               Morning of procedure: ${amDayOf} units`;
+                }
+            }
+            // Handle GLP-1 insulins (message only)
+            else if (insulinCategories.glp1Insulins.includes(type)) {
+                if (outputElement) {
+                    outputElement.innerHTML = `<p class="info-text">Hold 7 days before procedure.</p>`;
+                }
+            }
+        });
+    }
+
+    function updateForm() {
+        let selectedOptions = Array.from(document.getElementsByClassName("selected")).map(el => el.textContent);
+        let doseInputs = document.getElementById("dose-details");
+        doseInputs.innerHTML = "";
+
+        selectedOptions.forEach(type => {
+            let html = `<div class="option">${type}</div>`;
+
+            // Add instructions for short-acting and GLP-1 insulins
+            if (insulinCategories.shortActing.includes(type) || insulinCategories.glp1Insulins.includes(type)) {
+                if (insulinCategories.shortActing.includes(type)) {
+                    html += `<p class="info-text">Continue usual dosing the day before and hold the morning of the procedure.</p>`;
+                } else if (insulinCategories.glp1Insulins.includes(type)) {
+                    html += `<p class="info-text">Hold 7 days before procedure.</p>`;
+                }
+            } else if (insulinCategories.longActing.includes(type)) {
+                // For long-acting insulins, ask for timing and dose
+                html += `<label>Time of Dose:</label>
+                         <select class='am-pm' data-type='${type}' onchange='calculate()'>
+                             <option value='Morning'>Morning</option>
+                             <option value='Evening'>Evening</option>
+                         </select><br>
+                         <label>Dose (units):</label>
+                         <input type='number' class='dose' data-type='${type}' oninput='calculate()'>
+                         <div class="dose-output" id="output-${type}"></div>`;
+            } else if (insulinCategories.intermediateActing.includes(type)) {
+                // For intermediate-acting insulins, ask for morning and evening doses
+                html += `<label>Morning Dose (units):</label>
+                         <input type='number' class='morning-dose' data-type='${type}' oninput='calculate()'><br>
+                         <label>Evening Dose (units):</label>
+                         <input type='number' class='evening-dose' data-type='${type}' oninput='calculate()'>
+                         <div class="dose-output" id="output-${type}"></div>`;
+            }
+            // Add HTML for this type of insulin
+            doseInputs.innerHTML += html;
+        });
+    }
+
+
+
+    function resetForm() {
+        // Reset all inputs and selections
+        document.querySelectorAll(".dose").forEach(input => input.value = "");
+        document.querySelectorAll(".selected").forEach(el => el.classList.remove("selected"));
+        document.getElementById("dose-inputs").classList.add("hidden");
+        document.getElementById("selection-box").classList.remove("hidden");
+        enableNextButton();
+    }
+
+    // Initialize the page by displaying insulin options
+    displayInsulinOptions();
+
+</script>
+    <script>
+        window.onload = function() {
+            showSection('');  // Show this section by default when the page loads
+        };
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.container').forEach(function(container) {
+                container.style.display = 'none';  // Hide all sections by setting display to none
+            });
+
+            // Show the selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';  // Show the clicked section
+            }
+        }
+    </script>
+
+</body>
+</html>
